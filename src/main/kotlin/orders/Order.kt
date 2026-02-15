@@ -17,22 +17,31 @@ class Order(
      * If the product is null, it should be ignored.
      */
     fun addProduct(product: Product?) {
-        // TODO: add product to _products, ignore null
+        if (product!=null) _products.add(product)
     }
 
     /**
      * Removes the first product matching [productId].
      */
     fun removeProductById(productId: Int) {
-        // TODO: remove product from _products by id
+        for (i in 0.._products.size){
+            if (_products[i].id == productId){
+                _products.removeAt(i)
+                return
+            }
+        }
+
     }
 
     /**
      * Returns the total price of all products in the order.
      */
     override fun calculateTotal(): Int {
-        // TODO: sum the prices of all products
-        return 0
+        var sum : Int = 0
+
+        products.forEach { product -> sum+=product.price }
+
+        return sum
     }
 
     /**
@@ -40,7 +49,8 @@ class Order(
      * Throws [IllegalStateException] if the order has no products.
      */
     fun pay() {
-        // TODO: throw if _products is empty, otherwise set status to Paid
+        if (_products.isNotEmpty()) status= OrderStatus.Paid
+        else throw IllegalStateException("No products to pay for")
     }
 
     /**
@@ -48,6 +58,6 @@ class Order(
      * If [reason] is null, use "Unknown reason".
      */
     fun cancel(reason: String?) {
-        // TODO: set status to Cancelled with reason (default "Unknown reason" if null)
+        status = OrderStatus.Cancelled(reason = reason ?: "Unknown reason")
     }
 }
